@@ -12,4 +12,6 @@ public class StatisticsCalculator {
     public int calculateStatistic(Map<String, Integer> playerStats) {
         return strategy.calculate(playerStats);
     }
+
+
 }
