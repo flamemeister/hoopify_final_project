@@ -9,13 +9,42 @@ public class DatabaseConnection {
     private static DatabaseConnection instance;
     private Connection conn;
 
+    private void createTablesIfNotExist() {
+        try (Statement stmt = conn.createStatement()) {
+            // Create teams table if not exists
+            String createTeamsTableSQL = "CREATE TABLE IF NOT EXISTS teams (" +
+                    "id SERIAL PRIMARY KEY," +
+                    "team_name VARCHAR(255) UNIQUE NOT NULL" +
+                    ")";
+            stmt.executeUpdate(createTeamsTableSQL);
+
+            // Create players table if not exists
+            String createPlayersTableSQL = "CREATE TABLE IF NOT EXISTS players (" +
+                    "id SERIAL PRIMARY KEY," +
+                    "name VARCHAR(255) NOT NULL," +
+                    "age INT NOT NULL," +
+                    "position VARCHAR(255) NOT NULL," +
+                    "points INT NOT NULL," +
+                    "team_name VARCHAR(255)," +
+                    "FOREIGN KEY (team_name) REFERENCES teams(team_name)" +
+                    ")";
+            stmt.executeUpdate(createPlayersTableSQL);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
     private DatabaseConnection() {
-        String url = "jdbc:postgresql://localhost:5431/postgres";
+        String url = "jdbc:postgresql://localhost:5433/postgres";
         String username = "postgres";
-        String password = "aldik2003";
+        String password = "03110311";
 
         try {
             conn = DriverManager.getConnection(url, username, password);
+            createTablesIfNotExist();
         } catch (SQLException e) {
             e.printStackTrace();
         }
