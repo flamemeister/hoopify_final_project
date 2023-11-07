@@ -1,3 +1,7 @@
+package strategyPattern;
+
+import strategyPattern.StatisticsStrategy;
+
 import java.util.Map;
 class ReboundsStrategy implements StatisticsStrategy {
     @Override

@@ -1,5 +1,7 @@
+package strategyPattern;
+
 import java.util.Map;
 
-interface StatisticsStrategy {
+public interface StatisticsStrategy {
     int calculate(Map<String, Integer> playerStats);
 }

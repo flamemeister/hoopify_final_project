@@ -1,3 +1,5 @@
+package strategyPattern;
+
 import java.util.Map;
 class AssistsStrategy implements StatisticsStrategy {
     @Override
