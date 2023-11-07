@@ -1,5 +1,8 @@
+package strategyPattern;
+
 import java.util.Map;
-class StatisticsCalculator {
+
+public class StatisticsCalculator {
     private StatisticsStrategy strategy;
 
     public StatisticsCalculator(StatisticsStrategy strategy) {

@@ -1,6 +1,11 @@
+
+import strategyPattern.StatisticsCalculator;
+import strategyPattern.StatisticsStrategy;
+import strategyPattern.PointsStrategy;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Hoopify {
     public static void main(String[] args) {
@@ -18,6 +23,8 @@ public class Hoopify {
             Player player1 = playerFactory.createPlayer("Lebron", 25, "Guard");
             Player player2 = playerFactory.createPlayer("Michael", 28, "Forward");
 
+            StatisticsStrategy strategy = new PointsStrategy();
+            StatisticsCalculator calculator = new StatisticsCalculator(strategy);
 
             String selectPlayersSQL = "SELECT name, age, position, points FROM players";
             ResultSet rs = stmt.executeQuery(selectPlayersSQL);
