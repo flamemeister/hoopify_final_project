@@ -1,13 +1,14 @@
 
 import java.util.List;
-
+import observer.*;
 import java.util.Scanner;
 
-public class Hoopify {
+public class Hoopify implements HoopifyObserver{
     private static final Scanner scanner = new Scanner(System.in);
     private static final DatabaseConnection dbConnection = DatabaseConnection.getInstance();
 
     public static void main(String[] args) {
+        dbConnection.addObserver(new Hoopify());
         while (true) {
             printMenu();
             int choice = getUserChoice();
@@ -103,6 +104,12 @@ public class Hoopify {
         dbConnection.insertPlayer(playerName, age, position, points, teamName);
         System.out.println("Player added successfully!");
         System.out.println("---------------");
+    }
+    @Override
+    public void update() {
+        // Handle update logic when notified by DatabaseConnection
+        // You might want to refresh data or take other actions
+        System.out.println("Hoopify received update notification!");
     }
 }
 

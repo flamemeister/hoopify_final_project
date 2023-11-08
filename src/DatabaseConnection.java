@@ -5,8 +5,26 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import observer.*;
+
 @SuppressWarnings("ClassEscapesDefinedScope")
-public class DatabaseConnection {
+public class DatabaseConnection implements HoopifySubject {
+    private final List<HoopifyObserver> observers = new ArrayList<>();
+    @Override
+    public void addObserver(HoopifyObserver observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(HoopifyObserver observer) {
+        observers.remove(observer);
+    }
+
+    private void notifyObservers() {
+        for (HoopifyObserver observer : observers) {
+            observer.update();
+        }
+    }
     private static DatabaseConnection instance;
     private Connection conn;
 
@@ -25,7 +43,7 @@ public class DatabaseConnection {
                         "name VARCHAR(255) NOT NULL," +
                         "age INT NOT NULL," +
                         "position VARCHAR(255) NOT NULL," +
-                        "points INT NOT NULL," +
+                        "points INT NOT NULL" +
                     ")";
             stmt.executeUpdate(createPlayersTableSQL);
 
@@ -98,6 +116,8 @@ public class DatabaseConnection {
         try (Statement stmt = conn.createStatement()) {
             String insertTeamSQL = "INSERT INTO teams (team_name) VALUES ('" + teamName + "')";
             stmt.executeUpdate(insertTeamSQL);
+
+            notifyObservers();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -108,6 +128,8 @@ public class DatabaseConnection {
             String insertPlayerSQL = "INSERT INTO players (name, age, position, points, team_name) " +
                     "VALUES ('" + playerName + "', " + age + ", '" + position + "', " + points + ", '" + teamName + "')";
             stmt.executeUpdate(insertPlayerSQL);
+
+            notifyObservers();
         } catch (SQLException e) {
             e.printStackTrace();
         }

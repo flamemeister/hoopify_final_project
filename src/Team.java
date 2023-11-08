@@ -1,8 +1,9 @@
 
 import java.util.List;
 import java.util.ArrayList;
+import observer.*;
 
-class Team {
+class Team implements HoopifyObserver{
     private String name;
     private List<Player> players;
 
@@ -36,5 +37,11 @@ class Team {
                 "name='" + name + '\'' +
                 ", players=" + players +
                 '}';
+    }
+
+    @Override
+    public void update() {
+        System.out.println("Team data updated!");
+        // Handle team update logic here
     }
 }

@@ -1,6 +1,6 @@
+import observer.*;
 
-
-class Player {
+class Player implements HoopifyObserver{
     private String name;
     private int age;
     private String position;
@@ -53,6 +53,11 @@ class Player {
                 ", position='" + position + '\'' +
                 ", points=" + points +
                 '}';
+    }
+
+    @Override
+    public void update() {
+        System.out.println("Player data updated!");
     }
 }
 
