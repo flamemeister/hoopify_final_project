@@ -30,19 +30,24 @@ public class DatabaseConnection implements HoopifySubject {
         try (Statement stmt = conn.createStatement()) {
             String createTeamsTableSQL =
                     "CREATE TABLE IF NOT EXISTS teams (" +
-                        "id SERIAL PRIMARY KEY," +
-                        "team_name VARCHAR(255) UNIQUE NOT NULL" +
-                    ")";
+                            "id SERIAL PRIMARY KEY," +
+                            "team_name VARCHAR(255) UNIQUE NOT NULL" +
+                            ")";
             stmt.executeUpdate(createTeamsTableSQL);
 
             String createPlayersTableSQL =
                     "CREATE TABLE IF NOT EXISTS players (" +
-                        "id SERIAL PRIMARY KEY," +
-                        "name VARCHAR(255) NOT NULL," +
-                        "age INT NOT NULL," +
-                        "position VARCHAR(255) NOT NULL," +
-                        "points INT NOT NULL" +
-                    ")";
+                            "id SERIAL PRIMARY KEY," +
+                            "name VARCHAR(255) NOT NULL," +
+                            "age INT NOT NULL," +
+                            "position VARCHAR(255) NOT NULL," +
+                            "points INT NOT NULL," +
+                            "assists INT NOT NULL," +
+                            "rebounds INT NOT NULL," +
+                            "steals INT NOT NULL," +
+                            "blocks INT NOT NULL," +
+                            "team_name VARCHAR(255) NOT NULL" +
+                            ")";
             stmt.executeUpdate(createPlayersTableSQL);
 
         } catch (SQLException e) {
@@ -51,10 +56,11 @@ public class DatabaseConnection implements HoopifySubject {
     }
 
 
+
     private DatabaseConnection() {
-        String url = "jdbc:postgresql://localhost:5433/postgres";
+        String url = "jdbc:postgresql://localhost:5432/postgres";
         String username = "postgres";
-        String password = "03110311";
+        String password = "aldik2003";
 
         try {
             conn = DriverManager.getConnection(url, username, password);
@@ -82,7 +88,11 @@ public class DatabaseConnection implements HoopifySubject {
                 int playerAge = rs.getInt("age");
                 String playerPosition = rs.getString("position");
                 int playerPoints = rs.getInt("points");
-                Player player = new Player(playerName, playerAge, playerPosition, playerPoints);
+                int playerAssists = rs.getInt("assists");
+                int playerRebounds = rs.getInt("rebounds");
+                int playerSteals = rs.getInt("steals");
+                int playerBlocks = rs.getInt("blocks");
+                Player player = new Player(playerName, playerAge, playerPosition, playerPoints, playerAssists, playerRebounds, playerSteals, playerBlocks);
                 players.add(player);
             }
         } catch (SQLException e) {
@@ -126,10 +136,11 @@ public class DatabaseConnection implements HoopifySubject {
     public void insertPlayer(String playerName, int age, String position, int points, String teamName) {
         try (Statement stmt = conn.createStatement()) {
             PlayerFactory playerFactory = new PlayerFactory();
-            Player player = playerFactory.createPlayer(playerName, age, position);
+            Player player = playerFactory.createPlayer(playerName, age, position, points, 0, 0, 0, 0);
 
             String insertPlayerSQL = "INSERT INTO players (name, age, position, points, team_name) " +
-                    "VALUES ('" + player.name() + "', " + player.age() + ", '" + player.position() + "', " + points + ", '" + teamName + "')";
+                    "VALUES ('" + player.name() + "', " + player.age() + ", '" + player.position() + "', "
+                    + player.points() + ", '" + teamName + "')";
             stmt.executeUpdate(insertPlayerSQL);
 
             notifyObservers();
@@ -137,6 +148,7 @@ public class DatabaseConnection implements HoopifySubject {
             e.printStackTrace();
         }
     }
+
 
 }
 

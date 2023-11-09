@@ -83,6 +83,10 @@ public class Hoopify implements HoopifyObserver{
             System.out.println("Age: " + player.age());
             System.out.println("Position: " + player.position());
             System.out.println("Points: " + player.points());
+            System.out.println("Assists" + player.assists());
+            System.out.println("Rebounds" + player.rebounds());
+            System.out.println("Steals" + player.steals());
+            System.out.println("Blocks" + player.blocks());
             System.out.println("---------------");
         }
         System.out.println("---------------");
@@ -106,8 +110,16 @@ public class Hoopify implements HoopifyObserver{
         String position = scanner.next();
         System.out.print("Points: ");
         int points = scanner.nextInt();
+        System.out.println("Assists");
+        int assists = scanner.nextInt();
+        System.out.println("Rebounds");
+        int rebounds = scanner.nextInt();
+        System.out.println("Steals");
+        int steals = scanner.nextInt();
+        System.out.println("Blocks");
+        int blocks = scanner.nextInt();
 
-        // Assuming all players will be associated with a team
+
         System.out.print("Team name: ");
         String teamName = scanner.next();
         dbConnection.insertPlayer(playerName, age, position, points, teamName);
@@ -125,7 +137,7 @@ public class Hoopify implements HoopifyObserver{
         System.out.println("---------------\n");
         System.out.println("We have to tell a little more about the coach. He is a former player who became the coach of this team after his career\n");
         System.out.println("---------------\n");
-        Player player = new Player("Aldiyar Saken", 20, "PG", 100);
+        Player player = new Player("Aldiyar Saken", 20, "PG", 100, 10,  18, 39, 28);
         AwardsStrategy strategy = new CoachChampionshipsStrategy(3);
         Coach coach = new PlayerToCoachAdapter(player, strategy);
         System.out.println(coach);

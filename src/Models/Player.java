@@ -2,7 +2,7 @@ package Models;
 
 import Observer.HoopifyObserver;
 
-public record Player(String name, int age, String position, int points) implements HoopifyObserver {
+public record Player(String name, int age, String position, int points, int assists, int rebounds, int steals, int blocks) implements HoopifyObserver {
     @Override
     public String toString() {
         return "Models.Player{" +
@@ -10,6 +10,10 @@ public record Player(String name, int age, String position, int points) implemen
                 ", age=" + age +
                 ", position='" + position + '\'' +
                 ", points=" + points +
+                ", assists=" + assists +
+                ", rebounds=" + rebounds +
+                ", steals=" + steals +
+                ", blocks="  +blocks +
                 '}';
     }
 
