@@ -1,6 +1,16 @@
+import Adapter.Coach;
+import Adapter.PlayerToCoachAdapter;
+import Decorator.TeamWithChampionships;
+import Decorator.TeamWithCoach;
+import Models.Player;
+import Models.Team;
+import Models.TeamComponent;
+import Observer.HoopifyObserver;
+import Singleton.DatabaseConnection;
+import Strategy.AwardsStrategy;
+import Strategy.CoachChampionshipsStrategy;
 
 import java.util.List;
-import observer.*;
 import java.util.Scanner;
 
 public class Hoopify implements HoopifyObserver{
@@ -27,8 +37,7 @@ public class Hoopify implements HoopifyObserver{
                     addNewPlayer();
                     break;
                 case 5:
-                    System.out.println("Goodbye!");
-                    System.exit(0);
+                    quit();
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
@@ -60,7 +69,7 @@ public class Hoopify implements HoopifyObserver{
         System.out.println("All Teams:");
         List<Team> allTeams = dbConnection.getAllTeamsFromDatabase();
         for (Team team : allTeams) {
-            System.out.println("Team Name: " + team.getName());
+            System.out.println("Team name: " + team.name());
         }
         System.out.println("---------------");
     }
@@ -69,11 +78,10 @@ public class Hoopify implements HoopifyObserver{
         System.out.println("All Players:");
         List<Player> allPlayers = dbConnection.getAllPlayersFromDatabase();
         for (Player player : allPlayers) {
-            System.out.println("Player Name: " + player.getName());
-            System.out.println("Age: " + player.getAge());
-            System.out.println("Position: " + player.getPosition());
-            System.out.println("Points: " + player.getPoints());
-            System.out.println("Points: " + player.getPoints());
+            System.out.println("Player name: " + player.name());
+            System.out.println("Age: " + player.age());
+            System.out.println("Position: " + player.position());
+            System.out.println("Points: " + player.points());
             System.out.println("---------------");
         }
         System.out.println("---------------");
@@ -99,17 +107,38 @@ public class Hoopify implements HoopifyObserver{
         int points = scanner.nextInt();
 
         // Assuming all players will be associated with a team
-        System.out.print("Team Name: ");
+        System.out.print("Team name: ");
         String teamName = scanner.next();
         dbConnection.insertPlayer(playerName, age, position, points, teamName);
         System.out.println("Player added successfully!");
         System.out.println("---------------");
     }
+
+    public static void quit() {
+        System.out.println( "Before leaving the app we need to provide you with information about possibly the best team:\n" );
+        System.out.println("---------------\n");
+        TeamComponent baseTeam = new Team("Team of Sultaniyar Kuandyk");
+        TeamComponent teamWithCoach = new TeamWithCoach(baseTeam, "Aldiyar Saken");
+        TeamComponent teamWithChampionships = new TeamWithChampionships(teamWithCoach, 3);
+        System.out.println(teamWithChampionships);
+        System.out.println("---------------\n");
+        System.out.println("We have to tell a little more about the coach. He is a former player who became the coach of this team after his career\n");
+        System.out.println("---------------\n");
+        Player player = new Player("Aldiyar Saken", 20, "PG", 100);
+        AwardsStrategy strategy = new CoachChampionshipsStrategy(3);
+        Coach coach = new PlayerToCoachAdapter(player, strategy);
+        System.out.println(coach);
+        coach.conductTraining();
+        System.out.println("---------------\n");
+        System.out.println("Good bye!");
+        System.exit(0);
+    }
     @Override
     public void update() {
-        // Handle update logic when notified by DatabaseConnection
-        // You might want to refresh data or take other actions
-        System.out.println("Hoopify received update notification!");
+        System.out.println("\n---------------\n");
+        System.out.println("Observer Notification!");
+        System.out.println("New data has been added to the Database");
+        System.out.println("\n---------------\n");
     }
 }
 

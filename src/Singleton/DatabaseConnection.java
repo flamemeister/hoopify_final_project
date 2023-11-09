@@ -1,3 +1,5 @@
+package Singleton;
+
 import java.sql.*;
 import java.util.List;
 import java.util.ArrayList;
@@ -5,19 +7,15 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import observer.*;
+import Models.*;
+import Observer.*;
+import Factory.*;
 
-@SuppressWarnings("ClassEscapesDefinedScope")
 public class DatabaseConnection implements HoopifySubject {
     private final List<HoopifyObserver> observers = new ArrayList<>();
     @Override
     public void addObserver(HoopifyObserver observer) {
         observers.add(observer);
-    }
-
-    @Override
-    public void removeObserver(HoopifyObserver observer) {
-        observers.remove(observer);
     }
 
     private void notifyObservers() {
@@ -114,7 +112,9 @@ public class DatabaseConnection implements HoopifySubject {
 
     public void insertTeam(String teamName) {
         try (Statement stmt = conn.createStatement()) {
-            String insertTeamSQL = "INSERT INTO teams (team_name) VALUES ('" + teamName + "')";
+            TeamFactory teamFactory = new TeamFactory();
+            Team team  = teamFactory.createTeam( teamName );
+            String insertTeamSQL = "INSERT INTO teams (team_name) VALUES ('" + team.name() + "')";
             stmt.executeUpdate(insertTeamSQL);
 
             notifyObservers();
@@ -125,8 +125,11 @@ public class DatabaseConnection implements HoopifySubject {
 
     public void insertPlayer(String playerName, int age, String position, int points, String teamName) {
         try (Statement stmt = conn.createStatement()) {
+            PlayerFactory playerFactory = new PlayerFactory();
+            Player player = playerFactory.createPlayer(playerName, age, position);
+
             String insertPlayerSQL = "INSERT INTO players (name, age, position, points, team_name) " +
-                    "VALUES ('" + playerName + "', " + age + ", '" + position + "', " + points + ", '" + teamName + "')";
+                    "VALUES ('" + player.name() + "', " + player.age() + ", '" + player.position() + "', " + points + ", '" + teamName + "')";
             stmt.executeUpdate(insertPlayerSQL);
 
             notifyObservers();
