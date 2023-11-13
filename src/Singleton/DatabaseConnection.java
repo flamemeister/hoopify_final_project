@@ -31,7 +31,8 @@ public class DatabaseConnection implements HoopifySubject {
             String createTeamsTableSQL =
                     "CREATE TABLE IF NOT EXISTS teams (" +
                             "id SERIAL PRIMARY KEY," +
-                            "team_name VARCHAR(255) UNIQUE NOT NULL" +
+                            "team_name VARCHAR(255) UNIQUE NOT NULL," +  // Add a comma here
+                            "coache_name VARCHAR(255) " +             // Remove UNIQUE NOT NULL
                             ")";
             stmt.executeUpdate(createTeamsTableSQL);
 
@@ -48,6 +49,7 @@ public class DatabaseConnection implements HoopifySubject {
                             "blocks INT NOT NULL," +
                             "team_name VARCHAR(255) NOT NULL" +
                             ")";
+
             stmt.executeUpdate(createPlayersTableSQL);
 
         } catch (SQLException e) {
@@ -58,7 +60,7 @@ public class DatabaseConnection implements HoopifySubject {
 
 
     private DatabaseConnection() {
-        String url = "jdbc:postgresql://localhost:5432/postgres";
+        String url = "jdbc:postgresql://localhost:5431/postgres";
         String username = "postgres";
         String password = "aldik2003";
 
@@ -80,7 +82,7 @@ public class DatabaseConnection implements HoopifySubject {
         List<Player> players = new ArrayList<>();
 
         try (Statement stmt = conn.createStatement()) {
-            String selectPlayersSQL = "SELECT name, age, position, points FROM players";
+            String selectPlayersSQL = "SELECT * FROM players";
             ResultSet rs = stmt.executeQuery(selectPlayersSQL);
 
             while (rs.next()) {
@@ -120,11 +122,29 @@ public class DatabaseConnection implements HoopifySubject {
         return teams;
     }
 
-    public void insertTeam(String teamName) {
+    public List<String> getCoachesForTeam(String teamName) {
+        List<String> coaches = new ArrayList<>();
+        try (PreparedStatement stmt = conn.prepareStatement("SELECT coach_name FROM teams WHERE team_name = ?")) {
+            stmt.setString(1, teamName);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                String coachName = rs.getString("coach_name");
+                coaches.add(coachName);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return coaches;
+    }
+
+
+
+    public void insertTeam(String teamName, String coachName) {
         try (Statement stmt = conn.createStatement()) {
             TeamFactory teamFactory = new TeamFactory();
             Team team  = teamFactory.createTeam( teamName );
-            String insertTeamSQL = "INSERT INTO teams (team_name) VALUES ('" + team.name() + "')";
+            String insertTeamSQL = "INSERT INTO teams (team_name, coach_name) VALUES ('" + teamName + "', '" + coachName + "')";
             stmt.executeUpdate(insertTeamSQL);
 
             notifyObservers();
@@ -133,14 +153,14 @@ public class DatabaseConnection implements HoopifySubject {
         }
     }
 
-    public void insertPlayer(String playerName, int age, String position, int points, String teamName) {
+    public void insertPlayer(String playerName, int age, String position, int points, int assists, int rebounds, int steals, int blocks, String teamName) {
         try (Statement stmt = conn.createStatement()) {
             PlayerFactory playerFactory = new PlayerFactory();
-            Player player = playerFactory.createPlayer(playerName, age, position, points, 0, 0, 0, 0);
+            Player player = playerFactory.createPlayer(playerName, age, position, points, assists, rebounds, steals, blocks);
 
-            String insertPlayerSQL = "INSERT INTO players (name, age, position, points, team_name) " +
-                    "VALUES ('" + player.name() + "', " + player.age() + ", '" + player.position() + "', "
-                    + player.points() + ", '" + teamName + "')";
+            String insertPlayerSQL = "INSERT INTO players (name, age, position, points, assists, rebounds, steals, blocks, team_name) " +
+                    "VALUES ('" + player.name() + "', " + player.age() + ", '" + player.position() + "', " +
+                    player.points() + ", " + player.assists() + ", " + player.rebounds() + ", " + player.steals() + ", " + player.blocks() + ", '" + teamName + "')";
             stmt.executeUpdate(insertPlayerSQL);
 
             notifyObservers();
@@ -148,7 +168,6 @@ public class DatabaseConnection implements HoopifySubject {
             e.printStackTrace();
         }
     }
-
 
 }
 

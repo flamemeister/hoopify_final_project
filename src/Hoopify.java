@@ -37,8 +37,10 @@ public class Hoopify implements HoopifyObserver{
                     addNewPlayer();
                     break;
                 case 5:
-                    quit();
+                    seeCoachesForTeam();
                     break;
+                case 6:
+                    quit();
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
@@ -51,17 +53,17 @@ public class Hoopify implements HoopifyObserver{
         System.out.println("2. See all the players");
         System.out.println("3. Add new team");
         System.out.println("4. Add new player");
-        System.out.println("5. Quit");
+        System.out.println("5. See team's coaches");
+        System.out.println("6. Quit");
     }
 
     private static int getUserChoice() {
-        System.out.print("Enter your choice (1-5): ");
+        System.out.print("Enter your choice (1-6): ");
         try {
             return scanner.nextInt();
         } catch (java.util.InputMismatchException e) {
-            // Consume the invalid input
             scanner.nextLine();
-            return -1; // Return an invalid choice
+            return -1;
         }
     }
 
@@ -82,10 +84,10 @@ public class Hoopify implements HoopifyObserver{
             System.out.println("Age: " + player.age());
             System.out.println("Position: " + player.position());
             System.out.println("Points: " + player.points());
-            System.out.println("Assists" + player.assists());
-            System.out.println("Rebounds" + player.rebounds());
-            System.out.println("Steals" + player.steals());
-            System.out.println("Blocks" + player.blocks());
+            System.out.println("Assists: " + player.assists());
+            System.out.println("Rebounds: " + player.rebounds());
+            System.out.println("Steals: " + player.steals());
+            System.out.println("Blocks: " + player.blocks());
             System.out.println("---------------");
         }
         System.out.println("---------------");
@@ -94,7 +96,9 @@ public class Hoopify implements HoopifyObserver{
     private static void addNewTeam() {
         System.out.print("Enter the name of the new team: ");
         String teamName = scanner.next();
-        dbConnection.insertTeam(teamName);
+        System.out.print("Enter the name of the coach for the team: ");
+        String coachName = scanner.next();
+        dbConnection.insertTeam(teamName, coachName);
         System.out.println("Team added successfully!");
         System.out.println("---------------");
     }
@@ -121,22 +125,39 @@ public class Hoopify implements HoopifyObserver{
 
         System.out.print("Team name: ");
         String teamName = scanner.next();
-        dbConnection.insertPlayer(playerName, age, position, points, teamName);
+        dbConnection.insertPlayer(playerName, age, position, points, assists, rebounds, steals, blocks, teamName);
         System.out.println("Player added successfully!");
         System.out.println("---------------");
     }
 
+    public static void seeCoachesForTeam() {
+        System.out.print("Enter the name of the team to see coaches: ");
+        String teamName = scanner.next();
+        List<String> coaches = dbConnection.getCoachesForTeam(teamName);
+
+        if (coaches.isEmpty()) {
+            System.out.println("No coaches found for the specified team.");
+        } else {
+            System.out.println("Coaches for " + teamName + ":");
+            for (String coach : coaches) {
+                System.out.println(coach);
+            }
+        }
+        System.out.println("---------------");
+    }
+
+
     public static void quit() {
         System.out.println( "Before leaving the app we need to provide you with information about possibly the best team:\n" );
         System.out.println("---------------\n");
-        TeamComponent baseTeam = new Team("Team of Sultaniyar Kuandyk");
-        TeamComponent teamWithCoach = new TeamWithCoach(baseTeam, "Aldiyar Saken");
+        TeamComponent baseTeam = new Team("the USA");
+        TeamComponent teamWithCoach = new TeamWithCoach(baseTeam, "Steeve Kerr");
         TeamComponent teamWithChampionships = new TeamWithChampionships(teamWithCoach, 3);
         System.out.println(teamWithChampionships);
         System.out.println("---------------\n");
         System.out.println("We have to tell a little more about the coach. He is a former player who became the coach of this team after his career\n");
         System.out.println("---------------\n");
-        Player player = new Player("Aldiyar Saken", 20, "PG", 100, 10,  18, 39, 28);
+        Player player = new Player("Lebron James", 20, "PG", 100, 10,  18, 39, 28);
         AwardsStrategy strategy = new CoachChampionshipsStrategy(3);
         Coach coach = new PlayerToCoachAdapter(player, strategy);
         System.out.println(coach);
