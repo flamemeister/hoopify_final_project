@@ -31,8 +31,8 @@ public class DatabaseConnection implements HoopifySubject {
             String createTeamsTableSQL =
                     "CREATE TABLE IF NOT EXISTS teams (" +
                             "id SERIAL PRIMARY KEY," +
-                            "team_name VARCHAR(255) UNIQUE NOT NULL," +  // Add a comma here
-                            "coache_name VARCHAR(255) " +             // Remove UNIQUE NOT NULL
+                            "team_name VARCHAR(255) UNIQUE NOT NULL," +
+                            "coache_name VARCHAR(255) " +
                             ")";
             stmt.executeUpdate(createTeamsTableSQL);
 
@@ -143,8 +143,8 @@ public class DatabaseConnection implements HoopifySubject {
     public void insertTeam(String teamName, String coachName) {
         try (Statement stmt = conn.createStatement()) {
             TeamFactory teamFactory = new TeamFactory();
-            Team team  = teamFactory.createTeam( teamName );
-            String insertTeamSQL = "INSERT INTO teams (team_name, coach_name) VALUES ('" + teamName + "', '" + coachName + "')";
+            Team team  = teamFactory.createTeam( teamName, 0 );
+            String insertTeamSQL = "INSERT INTO teams (team_name, coach_name, awards) VALUES ('" + teamName + "', '" + coachName + "', 0)";
             stmt.executeUpdate(insertTeamSQL);
 
             notifyObservers();

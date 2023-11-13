@@ -12,6 +12,6 @@ public class TeamWithCoach extends TeamDecorator {
 
     @Override
     public String toString() {
-        return super.toString() + "coach='" + coach + "'\n";
+        return super.toString() + "Coach: " + coach + " \n";
     }
 }

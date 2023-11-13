@@ -45,9 +45,9 @@ public class PlayerToCoachAdapter implements Coach {
     @Override
     public String toString() {
         return "Player: \n" +
-                "name='" + getName() + '\n' +
-                "age=" + getAge() +
-                "role'" + getRole() + '\n' +
-                "championships" + countAwards() + '\n';
+                "Name: " + getName() + '\n' +
+                "Age: " + getAge() + '\n' +
+                "Role: " + getRole() + '\n' +
+                "Championships: " + countAwards() + '\n';
     }
 }

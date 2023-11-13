@@ -12,6 +12,7 @@ import Strategy.CoachChampionshipsStrategy;
 
 import java.util.List;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Hoopify implements HoopifyObserver{
     private static final Scanner scanner = new Scanner(System.in);
@@ -40,6 +41,9 @@ public class Hoopify implements HoopifyObserver{
                     seeCoachesForTeam();
                     break;
                 case 6:
+                    olympiadTeam();
+                    break;
+                case 7:
                     quit();
                 default:
                     System.out.println("Invalid choice. Please try again.");
@@ -54,11 +58,12 @@ public class Hoopify implements HoopifyObserver{
         System.out.println("3. Add new team");
         System.out.println("4. Add new player");
         System.out.println("5. See team's coaches");
-        System.out.println("6. Quit");
+        System.out.println("6. See olympiad team details");
+        System.out.println("7. Quit");
     }
 
     private static int getUserChoice() {
-        System.out.print("Enter your choice (1-6): ");
+        System.out.print("Enter your choice (1-7): ");
         try {
             return scanner.nextInt();
         } catch (java.util.InputMismatchException e) {
@@ -147,25 +152,42 @@ public class Hoopify implements HoopifyObserver{
     }
 
 
-    public static void quit() {
-        System.out.println( "Before leaving the app we need to provide you with information about possibly the best team:\n" );
+    public static void olympiadTeam() {
+        System.out.println( "That is the Redeem Team of the USA national olympiad team.\n" );
         System.out.println("---------------\n");
-        TeamComponent baseTeam = new Team("the USA");
-        TeamComponent teamWithCoach = new TeamWithCoach(baseTeam, "Steeve Kerr");
+        TeamComponent baseTeam = new Team("the USA national team");
+        TeamComponent teamWithCoach = new TeamWithCoach(baseTeam, "Steve Kerr");
         TeamComponent teamWithChampionships = new TeamWithChampionships(teamWithCoach, 3);
         System.out.println(teamWithChampionships);
         System.out.println("---------------\n");
-        System.out.println("We have to tell a little more about the coach. He is a former player who became the coach of this team after his career\n");
+        System.out.println("That is the team who are going to present the USA in the Olympics in 2024: \n");
         System.out.println("---------------\n");
-        Player player = new Player("Lebron James", 20, "PG", 100, 10,  18, 39, 28);
+        List<Player> players = new ArrayList<>();
+        players.add(new Player("Lebron James", 38, "SF", 13, 7, 4, 2, 4));
+        players.add(new Player("Kevin Durant", 35, "PF", 12, 3, 6, 1, 0));
+        players.add(new Player("Steph Curry", 33, "PG", 20, 6, 3, 3, 0));
+        players.add(new Player("Zach Lavine", 25, "SG", 8, 4, 4, 2, 1));
+        players.add(new Player("Anthony Davis", 30, "C", 13, 2, 11, 1, 5));
+
+        for (Player player : players) {
+            System.out.println(player);
+        }
+
         AwardsStrategy strategy = new CoachChampionshipsStrategy(3);
-        Coach coach = new PlayerToCoachAdapter(player, strategy);
+        Coach coach = new PlayerToCoachAdapter(players.get(0), strategy);
+
         System.out.println(coach);
         coach.conductTraining();
+
         System.out.println("---------------\n");
-        System.out.println("Good bye!");
+
+    }
+
+    public static void quit(){
+        System.out.println("Keep it G! Hoop it!");
         System.exit(0);
     }
+
     @Override
     public void update() {
         System.out.println("\n---------------\n");
@@ -174,4 +196,3 @@ public class Hoopify implements HoopifyObserver{
         System.out.println("\n---------------\n");
     }
 }
-
