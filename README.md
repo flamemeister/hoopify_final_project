@@ -37,11 +37,11 @@ Main part
 
 PlayerFactory:
 This factory is responsible for creating instances of the Player class. It encapsulates the instantiation details, allowing the client code to create players without directly invoking the new operator on the Player class. It's particularly useful when the process of creating a Player object involves complex logic or when you want to centralize the creation process.
-![img.png](images/img.png)
+<br> ![img.png](images/img.png) <br>
 TeamFactory:
 Similarly, the TeamFactory is designed to create instances of the Team class. It abstracts away the details of creating a team, providing a clean interface for the client code to generate teams without needing to understand the intricacies of the team creation process. This separation of concerns enhances modularity and maintainability.
 
-![img_1.png](images/img_1.png)
+<br> ![img_1.png](images/img_1.png) <br>
 
 
 
@@ -57,7 +57,7 @@ By centralizing the object creation in factories, you gain better control over t
 The pattern promotes code reusability by consolidating the creation logic in one place, reducing redundancy in the codebase.
 
 The factories are used to create instances of Player and Team objects with specified attributes, streamlining the database insertion process. So, this adheres to the Factory Design Pattern's core principles of abstraction, encapsulation, and providing a centralized mechanism for object creation.
-![img_2.png](images/img_2.png)
+<br> ![img_2.png](images/img_2.png) <br>
 
 2)	Singleton pattern:
       We have implemented the Singleton pattern in the class – DatabaseConnection. The Singleton pattern ensures that a class has only one instance and provides a global point of access to it.
@@ -71,27 +71,27 @@ The class contains a private static instance of itself (private static DatabaseC
 The class has a private constructor (private DatabaseConnection()) that can only be accessed within the class. This prevents external classes from creating new instances.
 •	Static Instance Retrieval Method:
 The class provides a public static method (public static DatabaseConnection getInstance()) to retrieve the instance of the class. This method ensures that only one instance of the DatabaseConnection class is created.  
-![img_3.png](images/img_3.png)
-![img_4.png](images/img_4.png) <br>
+<br> ![img_3.png](images/img_3.png) <br>
+<br> ![img_4.png](images/img_4.png) <br>
 Usage:
-![img_5.png](images/img_5.png)
+<br> ![img_5.png](images/img_5.png) <br>
 
 3)	Decorator pattern:
-      The implementation of “Decorator pattern” in our final project looks like this: <br>
-![img_6.png](images/img_6.png)
-![img_7.png](images/img_7.png)
+      The implementation of “Decorator pattern” in our final project looks like this:
+<br> ![img_6.png](images/img_6.png) <br>
+<br> ![img_7.png](images/img_7.png) <br>
 •	TeamComponent Interface: This is the component interface, which defines the base behavior that all concrete components (e.g., Team) must implement. It includes methods like name(), toString(), and update().
 •	TeamDecorator Class: This class acts as the base decorator. It implements the TeamComponent interface and contains a reference to a wrapped TeamComponent (composition). It provides default implementations for the interface methods by delegating to the wrapped TeamComponent. This allows for a chain of decorators to be applied to the core object.
 •	TeamWithChampionships Class: This is a concrete decorator that extends TeamDecorator. It adds the "Championships" attribute to a Team object. The toString() method is overridden to include information about the championships.
 •	TeamWithCoach Class: Another concrete decorator that extends TeamDecorator. It adds the "Coach" attribute to a Team object. The toString() method is overridden to include information about the coach.
 
-4)	Observer Pattern <br>
-![img_8.png](images/img_8.png)
-![img_9.png](images/img_9.png)
+4)	Observer Pattern
+<br> ![img_8.png](images/img_8.png) <br>
+<br> ![img_9.png](images/img_9.png) <br>
 
 
 Usage:
-![img_10.png](images/img_10.png)
+<br> ![img_10.png](images/img_10.png) <br>
 We used  Observer Pattern to make sure that when one thing changes, other things that care about it are automatically informed and updated. It's like getting notifications on our phone when someone posts a new message, so we always know what's going on without constantly checking.
 
 
@@ -107,20 +107,19 @@ We used  Observer Pattern to make sure that when one thing changes, other things
 
 5)	Adapter pattern:
       Adapter in our project is used to allow a Player object to be used as a Coach. It adapts the Player class to the Coach interface, so that a player can perform coaching activities while maintaining the same interface as a coach. This is helpful when we want to reuse player objects as coaches without modifying the Player class or the Coach interface.
-<br>
-![img_11.png](images/img_11.png)
+<br> ![img_11.png](images/img_11.png)<br>
 
 
 6)	Strategy pattern:
-![img_12.png](images/img_12.png)
-![img_13.png](images/img_13.png)
+<br> ![img_12.png](images/img_12.png)<br>
+<br> ![img_13.png](images/img_13.png)<br>
 
 We implemented Strategy Pattern  here to allow different ways of counting awards (in our case, championships) for coaches. It lets you change the counting method without modifying the Coach or Player classes.
 
 
 
-UML diagram
-![img_14.png](images/img_14.png)
+UML diagram 
+<br> ![img_14.png](images/img_14.png)<br>
 
 
 
