@@ -60,9 +60,8 @@ public class Hoopify implements HoopifyObserver{
         try {
             return scanner.nextInt();
         } catch (java.util.InputMismatchException e) {
-            // Consume the invalid input
             scanner.nextLine();
-            return -1; // Return an invalid choice
+            return -1;
         }
     }
 
@@ -79,14 +78,14 @@ public class Hoopify implements HoopifyObserver{
         System.out.println("All Players:");
         List<Player> allPlayers = dbConnection.getAllPlayersFromDatabase();
         for (Player player : allPlayers) {
-            System.out.println("Player name: " + player.name());
-            System.out.println("Age: " + player.age());
-            System.out.println("Position: " + player.position());
-            System.out.println("Points: " + player.points());
-            System.out.println("Assists" + player.assists());
-            System.out.println("Rebounds" + player.rebounds());
-            System.out.println("Steals" + player.steals());
-            System.out.println("Blocks" + player.blocks());
+            System.out.println("Player name: " + player.getName());
+            System.out.println("Age: " + player.getAge());
+            System.out.println("Position: " + player.getPosition());
+            System.out.println("Points: " + player.getPoints());
+            System.out.println("Assists" + player.getAssists());
+            System.out.println("Rebounds" + player.getRebounds());
+            System.out.println("Steals" + player.getSteals());
+            System.out.println("Blocks" + player.getBlocks());
             System.out.println("---------------");
         }
         System.out.println("---------------");
@@ -110,19 +109,19 @@ public class Hoopify implements HoopifyObserver{
         String position = scanner.next();
         System.out.print("Points: ");
         int points = scanner.nextInt();
-        System.out.println("Assists");
+        System.out.println("Assists: ");
         int assists = scanner.nextInt();
-        System.out.println("Rebounds");
+        System.out.println("Rebounds: ");
         int rebounds = scanner.nextInt();
-        System.out.println("Steals");
+        System.out.println("Steals: ");
         int steals = scanner.nextInt();
-        System.out.println("Blocks");
+        System.out.println("Blocks: ");
         int blocks = scanner.nextInt();
 
 
         System.out.print("Team name: ");
         String teamName = scanner.next();
-        dbConnection.insertPlayer(playerName, age, position, points, teamName);
+        dbConnection.insertPlayer(playerName, age, position, points, assists, rebounds, steals, blocks, teamName);
         System.out.println("Player added successfully!");
         System.out.println("---------------");
     }

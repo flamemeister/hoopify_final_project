@@ -1,15 +1,15 @@
 package Singleton;
 
-import java.sql.*;
-import java.util.List;
-import java.util.ArrayList;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import Factory.PlayerFactory;
+import Factory.TeamFactory;
+import Models.Player;
+import Models.Team;
+import Observer.HoopifyObserver;
+import Observer.HoopifySubject;
 
-import Models.*;
-import Observer.*;
-import Factory.*;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseConnection implements HoopifySubject {
     private final List<HoopifyObserver> observers = new ArrayList<>();
@@ -55,12 +55,10 @@ public class DatabaseConnection implements HoopifySubject {
         }
     }
 
-
-
     private DatabaseConnection() {
-        String url = "jdbc:postgresql://localhost:5432/postgres";
+        String url = "jdbc:postgresql://localhost:5433/postgres";
         String username = "postgres";
-        String password = "aldik2003";
+        String password = "03110311";
 
         try {
             conn = DriverManager.getConnection(url, username, password);
@@ -80,7 +78,7 @@ public class DatabaseConnection implements HoopifySubject {
         List<Player> players = new ArrayList<>();
 
         try (Statement stmt = conn.createStatement()) {
-            String selectPlayersSQL = "SELECT name, age, position, points FROM players";
+            String selectPlayersSQL = "SELECT * FROM players";
             ResultSet rs = stmt.executeQuery(selectPlayersSQL);
 
             while (rs.next()) {
@@ -133,14 +131,14 @@ public class DatabaseConnection implements HoopifySubject {
         }
     }
 
-    public void insertPlayer(String playerName, int age, String position, int points, String teamName) {
+    public void insertPlayer(String playerName, int age, String position, int points, int assists, int rebounds, int steals, int blocks, String teamName) {
         try (Statement stmt = conn.createStatement()) {
             PlayerFactory playerFactory = new PlayerFactory();
             Player player = playerFactory.createPlayer(playerName, age, position, points, 0, 0, 0, 0);
 
-            String insertPlayerSQL = "INSERT INTO players (name, age, position, points, team_name) " +
-                    "VALUES ('" + player.name() + "', " + player.age() + ", '" + player.position() + "', "
-                    + player.points() + ", '" + teamName + "')";
+            String insertPlayerSQL = "INSERT INTO players (name, age, position, points, assists, rebounds, steals, blocks, team_name) " +
+                    "VALUES ('" + player.getName() + "', " + player.getAge() + ", '" + player.getPosition() + "', "
+                    + player.getPoints() + ", 0, 0, 0, 0, '" + teamName + "')"; // Include default values for the missing columns
             stmt.executeUpdate(insertPlayerSQL);
 
             notifyObservers();
@@ -148,6 +146,7 @@ public class DatabaseConnection implements HoopifySubject {
             e.printStackTrace();
         }
     }
+
 
 
 }

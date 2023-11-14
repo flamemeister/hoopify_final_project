@@ -14,12 +14,12 @@ public class PlayerToCoachAdapter implements Coach {
 
     @Override
     public String getName() {
-        return player.name();
+        return player.getName();
     }
 
     @Override
     public int getAge() {
-        return player.age();
+        return player.getAge();
     }
 
     @Override
@@ -29,7 +29,7 @@ public class PlayerToCoachAdapter implements Coach {
 
     @Override
     public void conductTraining() {
-        System.out.println(player.name() + " is conducting training.\n");
+        System.out.println(player.getName() + " is conducting training.\n");
     }
 
     @Override
@@ -46,7 +46,7 @@ public class PlayerToCoachAdapter implements Coach {
     public String toString() {
         return "Player: \n" +
                 "name='" + getName() + '\n' +
-                "age=" + getAge() +
+                "age=" + getAge() + '\n' +
                 "role'" + getRole() + '\n' +
                 "championships" + countAwards() + '\n';
     }

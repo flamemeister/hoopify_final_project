@@ -1,6 +1,16 @@
 package Models;
 
-public record Team(String name) implements TeamComponent {
+public class Team implements TeamComponent {
+    private String name;
+
+    public Team(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
     @Override
     public String toString() {
         return "Team: \n" +
@@ -9,6 +19,11 @@ public record Team(String name) implements TeamComponent {
 
     @Override
     public void update() {
-        System.out.println("Models.Team data updated!");
+        System.out.println("Team data updated!");
+    }
+
+    @Override
+    public String name() {
+        return getName();
     }
 }
