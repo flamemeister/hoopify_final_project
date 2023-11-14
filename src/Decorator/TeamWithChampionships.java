@@ -12,6 +12,6 @@ public class TeamWithChampionships extends TeamDecorator {
 
     @Override
     public String toString() {
-        return super.toString() + "championships=" + championships + '\n';
+        return super.toString() + "Championships: " + championships + '\n';
     }
 }
